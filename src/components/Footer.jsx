@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
+import logo from '../assets/logowithout name.png'
+import namelogo from '../assets/namelogo.png'
 const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white">
@@ -67,7 +68,7 @@ const Footer = () => {
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
-              <Link to="/" className="text-2xl font-bold text-white">ShopNow</Link>
+              <Link to="/" className=" flex items-center justify-center text-2xl font-bold text-white"><img src={logo} alt='logo' className='h-8'/> <img src={namelogo} alt='logo' className='h-8'/></Link>
             </div>
             <div className="flex space-x-6">
               <Link to="/terms" className="text-gray-400 hover:text-white text-sm">Conditions of Use</Link>
