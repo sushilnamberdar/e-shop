@@ -20,8 +20,9 @@ import { ToastContainer } from 'react-toastify';
 import { CartProvider } from './context/CartContext';
 import 'react-toastify/dist/ReactToastify.css';
 import ProductDetailPage from './pages/ProductDetailPage';
-import OrdersPage from './pages/OrdersPage';
+import Orders from './pages/Orders';
 import EmailVerification from './pages/EmailVerification';
+import OrderConfirmation from './pages/OrderConfirmation';
 
 function App() {
   return (
@@ -70,12 +71,13 @@ function App() {
                 <CheckoutPage />
               </ProtectedRoute>
             } />
-            <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/orders" element={<Orders />} />
             <Route path="/verify-email" element={
               <ProtectedRoute>
                 <EmailVerification />
               </ProtectedRoute>
             } />
+            <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
 
             {/* Catch all route - Must be last */}
             <Route path="*" element={<NotFound />} />

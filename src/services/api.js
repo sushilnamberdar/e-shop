@@ -188,32 +188,83 @@ export const productAPI = {
   }
 };
 
+// Order APIs
 export const orderAPI = {
-  getOrders: async () => {
-    try {
-      const response = await api.get('/orders');
-      return response.data;
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-      throw error;
-    }
-  },
   createOrder: async (orderData) => {
     try {
+      console.log('Creating order with data:', orderData);
       const response = await api.post('/orders', orderData);
+      console.log('Order created successfully:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error creating order:', error);
-      throw error;
+      throw error.response?.data || error.message;
     }
   },
-  getOrder: async (orderId) => {
+
+  getUserOrders: async () => {
     try {
-      const response = await api.get(`/orders/${orderId}`);
+      console.log('Fetching user orders...');
+      const response = await api.get('/orders/my-orders');
+      console.log('User orders fetched successfully:', response.data);
       return response.data;
     } catch (error) {
-      console.error('Error fetching order:', error);
-      throw error;
+      console.error('Error fetching user orders:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response,
+        status: error.response?.status,
+        data: error.response?.data
+      });
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getOrderById: async (orderId) => {
+    try {
+      console.log('Fetching order by ID:', orderId);
+      const response = await api.get(`/orders/${orderId}`);
+      console.log('Order details fetched successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  getAllOrders: async () => {
+    try {
+      console.log('Fetching all orders...');
+      const response = await api.get('/orders');
+      console.log('All orders fetched successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching all orders:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  updateOrderStatus: async (orderId, status) => {
+    try {
+      console.log('Updating order status:', { orderId, status });
+      const response = await api.patch(`/orders/${orderId}/status`, { status });
+      console.log('Order status updated successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error updating order status:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  cancelOrder: async (orderId) => {
+    try {
+      console.log('Cancelling order:', orderId);
+      const response = await api.put(`/orders/${orderId}/cancel`);
+      console.log('Order cancelled successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error cancelling order:', error);
+      throw error.response?.data || error.message;
     }
   }
 };
