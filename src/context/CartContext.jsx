@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { cartAPI } from '../services/api';
+import { useNavigate } from 'react-router-dom';
+import { authAPI,cartAPI } from '../services/api';
 
 const CartContext = createContext();
 
@@ -111,16 +112,27 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const clearCart = async () => {
+  const clearCartItems = async () => {
     try {
-      // Remove each item from the cart
-      await Promise.all(cartItems.map(item => cartAPI.removeFromCart(item._id)));
+      // First get user details
+      const userData = await authAPI.getCurrentUser();
+      console.log("user details ",userData);
+      if (!userData) {
+        throw new Error('User not found');
+      }
+
+      // Then clear the cart using user ID
+      await cartAPI.clearCart(userData._id);
+      
+      // Clear local cart state
       setCartItems([]);
       setCartCount(0);
-      toast.success('Cart cleared');
+      
+      // Show success message
+      toast.success('Cart cleared successfully!');
     } catch (error) {
       console.error('Error clearing cart:', error);
-      toast.error('Failed to clear cart');
+      toast.error(error.message || 'Failed to clear cart');
     }
   };
 
@@ -137,7 +149,7 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
-        clearCart,
+        clearCart: clearCartItems,
         getCartTotal
       }}
     >

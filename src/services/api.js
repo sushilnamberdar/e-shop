@@ -1,5 +1,4 @@
-import axios from 'axios';
-
+import axios from "axios";
 const API_URL = 'http://localhost:5000/api';
 
 const api = axios.create({
@@ -141,6 +140,16 @@ export const cartAPI = {
     } catch (error) {
       console.error('Update quantity error:', error.response || error);
       throw error;
+    }
+  },
+
+   clearCart: async (userId) => {
+    try {
+
+      const response = await api.delete(`/cart/clear`, { userId });
+      return response.data;
+    } catch (error) {
+      throw error.response?.data || error.message;
     }
   }
 };
