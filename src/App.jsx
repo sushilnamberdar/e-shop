@@ -23,12 +23,15 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import Orders from './pages/Orders';
 import EmailVerification from './pages/EmailVerification';
 import OrderConfirmation from './pages/OrderConfirmation';
+import Header from './components/Header';
+import NewFooter from './components/NewFooter';
 
 function App() {
   return (
     <CartProvider>
       <div className="min-h-screen bg-gray-50 flex flex-col">
-        <Navbar />
+        {/* <Navbar /> */}
+        <Header/>
         <main className="flex-grow container mx-auto px-4 py-6 mt-16">
           <Routes>
             {/* Public Routes */}
@@ -83,7 +86,8 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-        <Footer />
+        {/* <Footer /> */}
+        <NewFooter/>
         <ToastContainer />
       </div>
     </CartProvider>
