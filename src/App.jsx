@@ -25,6 +25,7 @@ import EmailVerification from './pages/EmailVerification';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Header from './components/Header';
 import NewFooter from './components/NewFooter';
+import FeaturedProductDetailsPage from './pages/FeaturedProductDetails';
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             <Route path='/home' element={<HomePage/>}/>
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/:id" element={<ProductDetailPage />} />
+            <Route path="/featured/:id" element={<FeaturedProductDetailsPage />} />
             <Route path="/cart" element={<CartPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />

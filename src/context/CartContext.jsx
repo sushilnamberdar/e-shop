@@ -60,7 +60,6 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = async (product, quantity = 1) => {
     try {
-      console.log('Adding to cart:', product); // Debug log
       // First add to cart via API
       await cartAPI.addToCart({
         _id: product._id,
@@ -116,7 +115,6 @@ export const CartProvider = ({ children }) => {
     try {
       // First get user details
       const userData = await authAPI.getCurrentUser();
-      console.log("user details ",userData);
       if (!userData) {
         throw new Error('User not found');
       }

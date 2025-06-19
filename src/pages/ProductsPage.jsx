@@ -32,6 +32,7 @@ const ProductsPage = () => {
       setLoading(true);
       const category = selectedCategory === 'all' ? null : selectedCategory;
       const data = await productAPI.getProducts(category);
+      console.log('Fetched products:', data.products);
       setProducts(data.products);
       setError(null);
     } catch (error) {
@@ -138,7 +139,7 @@ const ProductsPage = () => {
                   ))}
                 </div>
                 <span className="text-gray-600 text-sm ml-2">
-                  ({product.reviews})
+                  ({product.reviews.length})
                 </span>
               </div>
               <div className="mt-2 flex justify-between items-center">
@@ -157,9 +158,9 @@ const ProductsPage = () => {
                   <FaShoppingCart className="h-5 w-5" />
                 </button>
               </div>
-              {!product.inStock && (
+              {!product.countInStock > 0 ? (
                 <p className="text-red-500 text-sm mt-2">Out of Stock</p>
-              )}
+              ) : null}
             </div>
           </div>
         ))}

@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 import { productAPI } from '../services/api';
 import { toast } from 'react-toastify';
 
-const ProductDetailPage = () => {
+const FeaturedProductDetailsPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -100,11 +100,10 @@ const ProductDetailPage = () => {
               {[...Array(5)].map((_, index) => (
                 <FaStar
                   key={index}
-                  className={`h-5 w-5 ${
-                    index < Math.floor(product.rating)
+                  className={`h-5 w-5 ${index < Math.floor(product.rating)
                       ? 'text-yellow-400'
                       : 'text-gray-300'
-                  }`}
+                    }`}
                 />
               ))}
             </div>
@@ -113,7 +112,7 @@ const ProductDetailPage = () => {
             </span>
           </div>
           <p className="text-2xl font-bold text-blue-600 mb-4">
-            ${product.price.toFixed(2)}
+            ${product.price}
           </p>
           <p className="text-gray-600 mb-6">{product.description}</p>
 
@@ -147,29 +146,34 @@ const ProductDetailPage = () => {
               </button>
             </div>
           </div>
+          {/* Show availability message or Add to Cart */}
+          {product.countInStock === 0 ? (
+            <div className="text-red-600 font-semibold text-center text-lg mt-4">
+              Currently not available
+            </div>
+          ) : (
+            <button
+              onClick={handleAddToCart}
+              disabled={addingToCart}
+              className={`w-full py-3 rounded-lg font-semibold transition flex items-center justify-center ${addingToCart
+                  ? 'bg-gray-400 cursor-not-allowed'
+                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+            >
+              {addingToCart ? (
+                <>
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  Adding to Cart...
+                </>
+              ) : (
+                <>
+                  <FaShoppingCart className="mr-2" />
+                  Add to Cart
+                </>
+              )}
+            </button>
+          )}
 
-          {/* Add to Cart Button */}
-          <button
-            onClick={handleAddToCart}
-            disabled={addingToCart}
-            className={`w-full py-3 rounded-lg font-semibold transition flex items-center justify-center ${
-              addingToCart
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
-          >
-            {addingToCart ? (
-              <>
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                Adding to Cart...
-              </>
-            ) : (
-              <>
-                <FaShoppingCart className="mr-2" />
-                Add to Cart
-              </>
-            )}
-          </button>
 
           {/* Features */}
           {product.features && (
@@ -212,4 +216,4 @@ const ProductDetailPage = () => {
   );
 };
 
-export default ProductDetailPage; 
+export default FeaturedProductDetailsPage; 

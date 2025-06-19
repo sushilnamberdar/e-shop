@@ -107,7 +107,7 @@ export const cartAPI = {
       if (!product._id) {
         throw new Error('Product ID is missing');
       }
-   
+
       const response = await api.post('/cart/add', {
         productId: product._id,  // This should be a valid MongoDB ObjectId
         name: product.name,
@@ -143,7 +143,7 @@ export const cartAPI = {
     }
   },
 
-   clearCart: async (userId) => {
+  clearCart: async (userId) => {
     try {
 
       const response = await api.delete(`/cart/clear`, { userId });
@@ -268,5 +268,13 @@ export const orderAPI = {
     }
   }
 };
+export const featuredProducts = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/featured`);
+    return response;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+}
 
 export default api; 

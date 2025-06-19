@@ -1,50 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Star, ShoppingCart, Heart, Eye } from 'lucide-react';
-
-const products = [
-  {
-    id: 1,
-    name: "Premium Leather Jacket",
-    price: "$299",
-    originalPrice: "$399",
-    rating: 4.8,
-    reviews: 124,
-    image: "https://images.pexels.com/photos/1124468/pexels-photo-1124468.jpeg?auto=compress&cs=tinysrgb&w=400",
-    badge: "Best Seller"
-  },
-  {
-    id: 2,
-    name: "Designer Sunglasses",
-    price: "$159",
-    originalPrice: "$199",
-    rating: 4.9,
-    reviews: 89,
-    image: "https://images.pexels.com/photos/701877/pexels-photo-701877.jpeg?auto=compress&cs=tinysrgb&w=400",
-    badge: "New"
-  },
-  {
-    id: 3,
-    name: "Luxury Watch",
-    price: "$549",
-    originalPrice: "$699",
-    rating: 4.7,
-    reviews: 203,
-    image: "https://images.pexels.com/photos/280250/pexels-photo-280250.jpeg?auto=compress&cs=tinysrgb&w=400",
-    badge: "Limited"
-  },
-  {
-    id: 4,
-    name: "Comfortable Sneakers",
-    price: "$129",
-    originalPrice: "$169",
-    rating: 4.6,
-    reviews: 156,
-    image: "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
-    badge: "Popular"
-  }
-];
+import { featuredProducts } from '../services/api';
+import { useCart } from '../context/CartContext';
+import { useNavigate } from 'react-router-dom';
 
 const FeaturedProducts = () => {
+// const [products, setProducts] = useState(null);
+    const navigate = useNavigate();
+   const [products, setProducts] = useState([]);
+  
+
+  useEffect(() => {
+    const fetchFeaturedProducts = async () => {
+      try {
+        const response = await featuredProducts();
+        console.log('Fetched Products:', response.data);
+        setProducts(response.data); // <-- Update state with API response
+      } catch (error) {
+        console.error('Error fetching featured products:', error);
+      }
+    };
+
+    fetchFeaturedProducts();
+  }, []);
+
+  const handleViewDetails = (productid) => {
+    navigate(`/featured/${productid}`);
+  };
+
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -61,7 +44,7 @@ const FeaturedProducts = () => {
         {/* Products Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {products.map((product) => (
-            <div key={product.id} className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
+            <div key={product.id || product._id} className="group relative bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2">
               {/* Product Image */}
               <div className="relative overflow-hidden rounded-t-2xl">
                 <img
@@ -94,9 +77,12 @@ const FeaturedProducts = () => {
 
                 {/* Quick Add to Cart */}
                 <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center">
+                  <button
+                    className="w-full bg-emerald-600 hover:bg-emerald-700 text-white py-2 px-4 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center"
+                    onClick={() => handleViewDetails(product._id)}
+                  >
                     <ShoppingCart className="h-4 w-4 mr-2" />
-                    Add to Cart
+                    View Details
                   </button>
                 </div>
               </div>
@@ -122,7 +108,7 @@ const FeaturedProducts = () => {
                     ))}
                   </div>
                   <span className="text-sm text-gray-600 ml-2">
-                    {product.rating} ({product.reviews})
+                    {product.rating} ({product.reviews.length})
                   </span>
                 </div>
 
