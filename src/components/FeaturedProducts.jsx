@@ -28,6 +28,9 @@ const FeaturedProducts = () => {
     navigate(`/featured/${productid}`);
   };
 
+  const viewallproductsbutton = () => {
+    navigate('/products');
+  };
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -108,7 +111,7 @@ const FeaturedProducts = () => {
                     ))}
                   </div>
                   <span className="text-sm text-gray-600 ml-2">
-                    {product.rating} ({product.reviews.length})
+                    {product.rating} 
                   </span>
                 </div>
 
@@ -124,7 +127,7 @@ const FeaturedProducts = () => {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <button className="bg-gray-100 hover:bg-gray-200 text-gray-900 px-8 py-3 rounded-lg font-semibold transition-colors duration-200">
+          <button onClick={viewallproductsbutton} className="bg-gray-100 hover:bg-gray-200 text-gray-900 px-8 py-3 rounded-lg font-semibold transition-colors duration-200">
             View All Products
           </button>
         </div>

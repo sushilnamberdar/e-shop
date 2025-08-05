@@ -2,9 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
+import emptycartimg from '../assets/emptycart.png';
+import { useNavigate } from 'react-router-dom';
 
 const CartPage = () => {
   const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal, loading } = useCart();
+  const navigate = useNavigate();
+  const handleimageclick = () => {
+    navigate('/products');
+  }
 
   if (loading) {
     return (
@@ -29,20 +35,27 @@ const CartPage = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 mt-16">
-      <h2 className="text-2xl font-bold mb-6">Shopping Cart</h2>
+    <div className="max-w-7xl mx-auto">
+      {
+        cartItems.length > 0 &&
+        <h2 className="text-2xl font-bold mb-6">Shopping Cart</h2>
+
+      }
       {cartItems.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-gray-600 mb-4">Your cart is empty.</p>
-          <Link 
-            to="/products" 
-            className="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
-          >
-            Continue Shopping
-          </Link>
+        <div
+          onClick={handleimageclick}
+          className="text-center py-12 min-h-screen"
+          style={{
+            backgroundImage: `url(${emptycartimg})`,
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'contain', // or 'contain' if you want the whole image visible
+          }}
+        >
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
           {/* Cart Items */}
           <div className="lg:col-span-2">
             <div className="bg-white rounded-lg shadow-md overflow-hidden">

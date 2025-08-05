@@ -1,13 +1,35 @@
 import React from 'react';
 import logo from '../assets/logowithout name.png';
 import { ShoppingCart, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-const NewFooter = ({ 
-  siteName = "Shopinity", 
+const NewFooter = ({
+  siteName = "Shopinity",
   logoIcon: LogoIcon = ShoppingCart,
   logoImage,
   nameLogoImage
 }) => {
+
+  const quicklinks = [
+    { name: 'About Us', to: '/about' },
+    { name: 'Shop All', to: '/products' },
+    { name: 'New Arrivals', to: '/new-arrivals' },
+    { name: 'Best Sellers', to: '/best-sellers' },
+    { name: 'Sale Items', to: '/sale-items' },
+    { name: 'Gift Cards', to: '/gift-cards' },
+  ];
+
+  const customerservicelinks = [
+    { name: 'Customer Service', to: '/customer-service' },
+    { name: 'Contact Us', to: '/contact' },
+    { name: 'FAQ', to: '/faq' },
+    { name: 'Shipping Info', to: '/shipping-info' },
+    { name: 'Returns & Exchanges', to: '/returns-and-exchanges' },
+    { name: 'Size Guide', to: '/size-guide' },
+    { name: 'Track Your Order', to: '/track-your-order' },
+  ];
+
+
   return (
     <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,16 +41,16 @@ const NewFooter = ({
               <div className="flex items-center">
                 {logoImage ? (
                   <div className="flex items-center">
-                    <img 
-                      src={logoImage} 
+                    <img
+                      src={logoImage}
                       alt={`${siteName} logo`}
                       className="h-10 w-10 object-contain"
                     />
                     <span className="ml-3 text-xl font-bold">{siteName}</span>
                   </div>
                 ) : nameLogoImage ? (
-                  <img 
-                    src={nameLogoImage} 
+                  <img
+                    src={nameLogoImage}
                     alt={`${siteName} logo`}
                     className="h-10 w-auto object-contain brightness-0 invert"
                   />
@@ -41,7 +63,7 @@ const NewFooter = ({
                 )}
               </div>
               <p className="text-gray-300 leading-relaxed">
-                Discover premium products that combine style, quality, and exceptional value. 
+                Discover premium products that combine style, quality, and exceptional value.
                 Your satisfaction is our commitment.
               </p>
               <div className="flex space-x-4">
@@ -64,11 +86,11 @@ const NewFooter = ({
             <div>
               <h3 className="text-lg font-semibold mb-6">Quick Links</h3>
               <ul className="space-y-3">
-                {['About Us', 'Shop All', 'New Arrivals', 'Best Sellers', 'Sale Items', 'Gift Cards'].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-300 hover:text-emerald-400 transition-colors duration-200">
-                      {link}
-                    </a>
+                {quicklinks.map((link) => (
+                  <li key={link.name}>
+                    <Link to={link.to} className="text-gray-300 hover:text-emerald-400 transition-colors duration-200">
+                      {link.name}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -78,11 +100,11 @@ const NewFooter = ({
             <div>
               <h3 className="text-lg font-semibold mb-6">Customer Service</h3>
               <ul className="space-y-3">
-                {['Contact Us', 'FAQ', 'Shipping Info', 'Returns & Exchanges', 'Size Guide', 'Track Your Order'].map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-gray-300 hover:text-emerald-400 transition-colors duration-200">
-                      {link}
-                    </a>
+                {customerservicelinks.map((link) => (
+                  <li key={link.name}>
+                    <Link to={link.to} className="text-gray-300 hover:text-emerald-400 transition-colors duration-200">
+                      {link.name}
+                    </Link>
                   </li>
                 ))}
               </ul>
@@ -122,7 +144,7 @@ const NewFooter = ({
           </div>
         </div>
 
-        {/* Newsletter Section */}
+        {/* Newsletter Section
         <div className="border-t border-gray-800 py-8">
           <div className="text-center">
             <h3 className="text-lg font-semibold mb-2">Stay Updated</h3>
@@ -138,7 +160,7 @@ const NewFooter = ({
               </button>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Bottom Footer */}
         <div className="border-t border-gray-800 py-6">

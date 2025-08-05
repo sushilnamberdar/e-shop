@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
 import ProductPage from './pages/ProductPage';
 import ProductsPage from './pages/ProductsPage';
@@ -12,8 +11,8 @@ import ProfilePage from './pages/ProfilePage';
 import AddressesPage from './pages/AddressesPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import CheckoutPage from './pages/CheckoutPage';
-import AboutPage from './pages/AboutPage';
-import ContactPage from './pages/ContactPage';
+import AboutPage from './staticpage/AboutPage';
+import ContactPage from './staticpage/ContactPage';
 import NotFound from './components/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
@@ -24,12 +23,14 @@ import Orders from './pages/Orders';
 import EmailVerification from './pages/EmailVerification';
 import OrderConfirmation from './pages/OrderConfirmation';
 import Header from './components/Header';
-import NewFooter from './components/NewFooter';
+import NewFooter from './staticpage/NewFooter';
 import FeaturedProductDetailsPage from './pages/FeaturedProductDetails';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <CartProvider>
+      <ScrollToTop/>
       <div className="min-h-screen bg-gray-50 flex flex-col">
         {/* <Navbar /> */}
         <Header/>
@@ -88,7 +89,6 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-        {/* <Footer /> */}
         <NewFooter/>
         <ToastContainer />
       </div>

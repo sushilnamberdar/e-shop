@@ -1,6 +1,6 @@
 import axios from "axios";
 // Email Verification APIs
-const apiurl = 'http://localhost:5000/api'
+const apiurl = 'http://localhost:5080/api'
 
 
 export const sendVerificationEmail = async () => {

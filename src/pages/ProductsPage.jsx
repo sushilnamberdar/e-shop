@@ -4,6 +4,8 @@ import { FaStar, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 import { productAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -11,6 +13,8 @@ const ProductsPage = () => {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const { addToCart } = useCart();
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   const categories = [
     { id: 'all', name: 'All Products' },
@@ -23,6 +27,18 @@ const ProductsPage = () => {
     { id: 'Accessories', name: 'Accessories' }
   ];
 
+  // fetch user if loged in or not 
+  useEffect(()=> {
+    const userData = Cookies.get('token');
+    console.log('User Data:', userData);
+    if (userData) {
+      setUser(userData);
+    } else {
+      setUser(null);
+    }
+
+  });
+
   useEffect(() => {
     fetchProducts();
   }, [selectedCategory]);
@@ -32,7 +48,7 @@ const ProductsPage = () => {
       setLoading(true);
       const category = selectedCategory === 'all' ? null : selectedCategory;
       const data = await productAPI.getProducts(category);
-      console.log('Fetched products:', data.products);
+      // console.log('Fetched products:', data.products);
       setProducts(data.products);
       setError(null);
     } catch (error) {
@@ -45,7 +61,12 @@ const ProductsPage = () => {
   };
 
   const handleAddToCart = (product) => {
-    if (!product.inStock) {
+    if (!user) {
+      toast.error('Please log in to add items to your cart');
+      navigate("/login");
+      return;
+    }
+    if (product.countInStock <=0) {
       toast.error('Product is out of stock');
       return;
     }
@@ -138,9 +159,7 @@ const ProductsPage = () => {
                     />
                   ))}
                 </div>
-                <span className="text-gray-600 text-sm ml-2">
-                  ({product.reviews.length})
-                </span>
+                
               </div>
               <div className="mt-2 flex justify-between items-center">
                 <span className="text-xl font-bold text-blue-600">
@@ -148,9 +167,9 @@ const ProductsPage = () => {
                 </span>
                 <button
                   onClick={() => handleAddToCart(product)}
-                  disabled={!product.inStock}
+                  disabled={product.countInStock <= 0}
                   className={`p-2 rounded-full transition ${
-                    product.inStock
+                    product.countInStock > 0
                       ? 'bg-blue-600 text-white hover:bg-blue-700'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                   }`}
