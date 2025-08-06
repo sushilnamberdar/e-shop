@@ -277,4 +277,12 @@ export const featuredProducts = async () => {
   }
 }
 
+
+
+export const updateAddress = async (addressId, updatedData) => {
+  console.log('updateAddress called with id:', addressId, 'and data:', updatedData);
+    const payload = { ...updatedData, addressId};
+  return api.put(`${API_URL}/users/addressupdate`, payload);
+};
+
 export default api; 

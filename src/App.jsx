@@ -8,7 +8,6 @@ import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
-import AddressesPage from './pages/AddressesPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import CheckoutPage from './pages/CheckoutPage';
 import AboutPage from './staticpage/AboutPage';
@@ -26,6 +25,7 @@ import Header from './components/Header';
 import NewFooter from './staticpage/NewFooter';
 import FeaturedProductDetailsPage from './pages/FeaturedProductDetails';
 import ScrollToTop from './components/ScrollToTop';
+import NewAddressPage from './pages/NewAddressPage';
 
 function App() {
   return (
@@ -64,7 +64,7 @@ function App() {
             } />
             <Route path="/addresses" element={
               <ProtectedRoute>
-                <AddressesPage />
+                <NewAddressPage/>
               </ProtectedRoute>
             } />
             <Route path="/change-password" element={

@@ -143,25 +143,6 @@ const NewFooter = ({
             </div>
           </div>
         </div>
-
-        {/* Newsletter Section
-        <div className="border-t border-gray-800 py-8">
-          <div className="text-center">
-            <h3 className="text-lg font-semibold mb-2">Stay Updated</h3>
-            <p className="text-gray-300 mb-4">Subscribe to get special offers, updates, and insider access.</p>
-            <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-3">
-              <input
-                type="email"
-                placeholder="Your email address"
-                className="flex-1 px-4 py-2 bg-gray-800 border border-gray-700 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-white placeholder-gray-400"
-              />
-              <button className="bg-emerald-600 hover:bg-emerald-700 px-6 py-2 rounded-lg font-medium transition-colors duration-200">
-                Subscribe
-              </button>
-            </div>
-          </div>
-        </div> */}
-
         {/* Bottom Footer */}
         <div className="border-t border-gray-800 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
