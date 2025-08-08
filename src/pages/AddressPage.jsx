@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { FaTrash } from 'react-icons/fa';
 import EditAddressModal from '../model/EditAddressModal';
 
-const NewAddressPage = () => {
+const AddressPage = () => {
     const [addresses, setAddresses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedAddress, setSelectedAddress] = useState(null);
@@ -211,4 +211,4 @@ const Input = ({ label, name, value, onChange }) => (
     </div>
 );
 
-export default NewAddressPage;
+export default AddressPage;

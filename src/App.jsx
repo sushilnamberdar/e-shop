@@ -26,7 +26,7 @@ import Header from './components/Header';
 import NewFooter from './staticpage/NewFooter';
 import FeaturedProductDetailsPage from './pages/FeaturedProductDetails';
 import ScrollToTop from './components/ScrollToTop';
-import NewAddressPage from './pages/NewAddressPage';
+import AddressPage from './pages/AddressPage';
 
 function App() {
   return (
@@ -65,7 +65,7 @@ function App() {
             } />
             <Route path="/addresses" element={
               <ProtectedRoute>
-                <NewAddressPage/>
+                <AddressPage/>
               </ProtectedRoute>
             } />
             <Route path="/change-password" element={
