@@ -10,6 +10,7 @@ import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import CheckoutPage from './pages/CheckoutPage';
+import StripeCheckoutPage from './pages/StripeCheckoutPage';
 import AboutPage from './staticpage/AboutPage';
 import ContactPage from './staticpage/ContactPage';
 import NotFound from './components/NotFound';
@@ -70,6 +71,11 @@ function App() {
             <Route path="/change-password" element={
               <ProtectedRoute>
                 <ChangePasswordPage />
+              </ProtectedRoute>
+            } />
+            <Route path="/checkout/:orderId" element={
+              <ProtectedRoute>
+                <StripeCheckoutPage />
               </ProtectedRoute>
             } />
             <Route path="/checkout" element={

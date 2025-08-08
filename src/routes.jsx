@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import CartPage from './pages/CartPage';
 import ProfilePage from './pages/ProfilePage';
 import AddressesPage from './pages/AddressesPage';
+import PaymentPage from './pages/PaymentPage';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 
 const AppRoutes = () => {
@@ -22,6 +23,7 @@ const AppRoutes = () => {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/addresses" element={<AddressesPage />} />
           <Route path="/change-password" element={<ChangePasswordPage />} />
+          <Route path="/checkout/:orderId" element={<PaymentPage />} />
         </Routes>
       </main>
     </div>

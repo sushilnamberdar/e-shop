@@ -1,16 +1,109 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
 import emptycartimg from '../assets/emptycart.png';
 import { useNavigate } from 'react-router-dom';
+import { orderAPI, getAddresses } from '../services/api';
+import { toast } from 'react-toastify';
 
 const CartPage = () => {
   const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal, loading } = useCart();
   const navigate = useNavigate();
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const [addresses, setAddresses] = useState([]);
+  const [addressesLoading, setAddressesLoading] = useState(true);
+  const [selectedAddressId, setSelectedAddressId] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('credit_card');
+  
   const handleimageclick = () => {
     navigate('/products');
   }
+
+  // Load latest 3 addresses
+  useEffect(() => {
+    let isMounted = true;
+    async function fetchAddresses() {
+      try {
+        setAddressesLoading(true);
+        const res = await getAddresses();
+        const list = res?.data?.addresses || [];
+        // Keep the most recent 3
+        const latestThree = list.slice(-3);
+        if (!isMounted) return;
+        setAddresses(latestThree);
+        if (latestThree.length > 0) {
+          setSelectedAddressId(latestThree[latestThree.length - 1]._id);
+        }
+      } catch (err) {
+        console.error('Failed to load addresses:', err);
+        if (isMounted) toast.error('Failed to load addresses');
+      } finally {
+        if (isMounted) setAddressesLoading(false);
+      }
+    }
+    fetchAddresses();
+    return () => { isMounted = false; };
+  }, []);
+
+  const handleCheckout = async () => {
+    if (!cartItems || cartItems.length === 0) {
+      toast.error('Your cart is empty!');
+      return;
+    }
+
+    // Validate address selection
+    const chosenAddress = addresses.find(a => a._id === selectedAddressId);
+    if (!chosenAddress) {
+      toast.error('Please select a delivery address.');
+      return;
+    }
+
+    try {
+      setCheckoutLoading(true);
+      
+      // Calculate total
+      const orderTotal = getCartTotal();
+      
+      // Prepare order data
+      const orderData = {
+        items: cartItems.map(item => ({
+          product: item._id,
+          quantity: item.quantity,
+          price: item.price
+        })),
+        shippingAddress: {
+          name: `${chosenAddress.firstName || ''} ${chosenAddress.lastName || ''}`.trim() || 'NA',
+          address: chosenAddress.street || chosenAddress.address || 'NA',
+          city: chosenAddress.city || chosenAddress.state || 'NA',
+          state: chosenAddress.state || 'NA',
+          zipCode: chosenAddress.zip || chosenAddress.postalCode || chosenAddress.zipCode || 'NA',
+          phone: String(chosenAddress.number || chosenAddress.phone || 'NA')
+        },
+        totalAmount: orderTotal,
+        // Must be one of: 'credit_card' | 'debit_card'
+        paymentMethod
+      };
+
+      // Create order
+      const order = await orderAPI.createOrder(orderData);
+      
+      // Navigate next step
+      const createdOrderId = order?.order?._id || order?.orderId || order?._id;
+      if (createdOrderId) {
+        if (paymentMethod === 'credit_card' || paymentMethod === 'debit_card') {
+          toast.success('Order created. Redirecting to payment...');
+          navigate(`/checkout/${createdOrderId}`);
+        } 
+      } else {
+        toast.error('Order created but ID missing.');
+      }
+    } catch (error) {
+      console.error('Error creating order:', error);
+      toast.error(error.message || 'Failed to create order. Please try again.');
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -107,8 +200,77 @@ const CartPage = () => {
             </div>
           </div>
 
-          {/* Order Summary */}
-          <div className="lg:col-span-1">
+          {/* Right Column: Address, Payment, Summary */}
+          <div className="lg:col-span-1 space-y-6">
+            {/* Address Selection (latest 3) */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-lg font-semibold">Delivery Address</h3>
+                <button className="text-blue-600 text-sm hover:underline" onClick={() => navigate('/addresses')}>Manage</button>
+              </div>
+              {addressesLoading ? (
+                <p className="text-gray-600 text-sm">Loading addresses…</p>
+              ) : addresses.length === 0 ? (
+                <div className="text-sm text-gray-700">
+                  <p className="mb-2">You have no saved addresses.</p>
+                  <button
+                    onClick={() => navigate('/addresses')}
+                    className="px-3 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Add Address
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {addresses.map(addr => (
+                    <label key={addr._id} className="flex items-start space-x-3 p-3 border rounded hover:bg-gray-50 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="address"
+                        className="mt-1"
+                        checked={selectedAddressId === addr._id}
+                        onChange={() => setSelectedAddressId(addr._id)}
+                      />
+                      <div>
+                        <p className="font-medium">{`${addr.firstName || ''} ${addr.lastName || ''}`.trim() || '—'}</p>
+                        <p className="text-gray-600 text-sm">{addr.street || addr.address || ''}</p>
+                        <p className="text-gray-600 text-sm">{[addr.city, addr.state, addr.zip].filter(Boolean).join(', ')}</p>
+                        {addr.number ? <p className="text-gray-600 text-sm">{addr.number}</p> : null}
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Payment Method (credit or debit card only) */}
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h3 className="text-lg font-semibold mb-4">Payment Method</h3>
+              <div className="space-y-3 text-sm">
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="credit_card"
+                    checked={paymentMethod === 'credit_card'}
+                    onChange={() => setPaymentMethod('credit_card')}
+                  />
+                  <span>Credit Card</span>
+                </label>
+                <label className="flex items-center space-x-3">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="debit_card"
+                    checked={paymentMethod === 'debit_card'}
+                    onChange={() => setPaymentMethod('debit_card')}
+                  />
+                  <span>Debit Card</span>
+                </label>
+              </div>
+            </div>
+
+            {/* Order Summary */}
             <div className="bg-white rounded-lg shadow-md p-6">
               <h3 className="text-lg font-semibold mb-4">Order Summary</h3>
               <div className="space-y-4">
@@ -132,12 +294,13 @@ const CartPage = () => {
                 >
                   Clear Cart
                 </button>
-                <Link
-                  to="/checkout"
-                  className="block w-full py-2 text-center bg-blue-600 text-white rounded hover:bg-blue-700 transition"
+                <button
+                  onClick={handleCheckout}
+                  disabled={checkoutLoading || !selectedAddressId}
+                  className="w-full py-2 text-center bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Proceed to Checkout
-                </Link>
+                  {checkoutLoading ? 'Creating Order...' : 'Proceed to Checkout'}
+                </button>
               </div>
             </div>
           </div>

@@ -62,11 +62,15 @@ const CheckoutPage = () => {
 
       // Create order
       const order = await orderAPI.createOrder(orderData);
-          // Clear cart after successful order
-      await clearCart();
-      
-      toast.success('Order placed successfully!');
-      navigate(`/order-confirmation/${order.order._id}`);
+
+      // Navigate to payment page for Stripe checkout
+      const createdOrderId = order?.order?._id || order?.orderId || order?._id;
+      if (createdOrderId) {
+        toast.success('Order created. Redirecting to payment…');
+        navigate(`/checkout/${createdOrderId}`);
+      } else {
+        toast.error('Order created but id missing.');
+      }
     } catch (error) {
       console.error('Error placing order:', error);
       toast.error(error.message || 'Failed to place order. Please try again.');
@@ -236,7 +240,7 @@ const CheckoutPage = () => {
                   Processing...
                 </span>
               ) : (
-                'Place Order'
+                'Continue to Payment'
               )}
             </button>
           </form>

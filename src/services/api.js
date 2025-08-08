@@ -285,4 +285,34 @@ export const updateAddress = async (addressId, updatedData) => {
   return api.put(`${API_URL}/users/addressupdate`, payload);
 };
 
+// Payment APIs
+export const paymentAPI = {
+  createPaymentIntent: async (orderId) => {
+    try {
+      console.log('Creating payment intent for order:', orderId);
+      const response = await api.post('/payments/create-payment-intent', { orderId });
+      console.log('Payment intent created successfully:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error creating payment intent:', error);
+      throw error.response?.data || error.message;
+    }
+  },
+
+  confirmPaymentSuccess: async (orderId, paymentIntentId) => {
+    try {
+      console.log('Confirming payment success:', { orderId, paymentIntentId });
+      const response = await api.post('/payments/payment-success', { 
+        orderId, 
+        paymentIntentId 
+      });
+      console.log('Payment success confirmed:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error confirming payment success:', error);
+      throw error.response?.data || error.message;
+    }
+  }
+};
+
 export default api; 
