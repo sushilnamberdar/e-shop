@@ -1,13 +1,21 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Player } from '@lottiefiles/react-lottie-player';
+import notfoundimg404 from '../assets/Error-404.json'
 
 const NotFound = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-gray-100 flex items-center justify-center px-4">
+    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-emerald-50 via-white to-blue-50 flex items-center justify-center px-4">
       <div className="max-w-lg w-full text-center">
-        <h1 className="text-9xl font-bold text-blue-600">404</h1>
+        {/* <h1 className="text-9xl font-bold text-blue-600">404</h1> */}
+        <Player
+        autoplay
+        loop
+        src={notfoundimg404}
+        style={{ height: '400px', width: '400px', margin: '0 auto' }}
+        />
         <h2 className="text-3xl font-semibold text-gray-800 mt-4">Page Not Found</h2>
         <p className="text-gray-600 mt-2">
           Oops! The page you're looking for doesn't exist or you don't have permission to access it.

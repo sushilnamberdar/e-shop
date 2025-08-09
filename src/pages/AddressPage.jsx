@@ -117,7 +117,7 @@ const AddressPage = () => {
             {addresses.map((addr) => (
                 <label
                     key={addr._id}
-                    className={`flex items-start justify-between p-4 border rounded-lg bg-white cursor-pointer transition hover:shadow ${selectedAddress === addr._id ? 'border-green-500' : 'border-gray-300'
+                    className={`flex items-start justify-between p-4  border rounded-lg bg-white cursor-pointer transition hover:shadow ${selectedAddress === addr._id ? 'border-green-500' : 'border-gray-300'
                         }`}
                 >
                     <div className="flex items-start gap-4">
@@ -161,7 +161,7 @@ const AddressPage = () => {
             {/* Add New Address */}
             <form
                 onSubmit={handleSubmit}
-                className="p-6 border border-green-500 rounded-lg bg-white space-y-6"
+                className="p-6 border  border-green-500 rounded-lg bg-white space-y-6"
             >
                 <div className="flex items-center gap-2">
                     <input type="radio" checked readOnly className="accent-green-600" />

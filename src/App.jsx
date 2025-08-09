@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
-import ProductPage from './pages/ProductPage';
 import ProductsPage from './pages/ProductsPage';
 import CartPage from './pages/CartPage';
 import LoginPage from './pages/LoginPage';
@@ -13,7 +12,8 @@ import CheckoutPage from './pages/CheckoutPage';
 import StripeCheckoutPage from './pages/StripeCheckoutPage';
 import AboutPage from './staticpage/AboutPage';
 import ContactPage from './staticpage/ContactPage';
-import NotFound from './components/NotFound';
+import SupportPage from './staticpage/SupportPage';
+import NotFound from './staticpage/NotFound';
 import ProtectedRoute from './components/ProtectedRoute';
 import { ToastContainer } from 'react-toastify';
 import { CartProvider } from './context/CartContext';
@@ -46,6 +46,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/support" element={<SupportPage />} />
             <Route path="/login" element={
               <ProtectedRoute requireAuth={false}>
                 <LoginPage />

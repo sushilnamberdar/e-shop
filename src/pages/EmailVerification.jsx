@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { sendVerificationEmail, verifyEmail } from '../api';
 import { FaEnvelope, FaSpinner, FaCheckCircle } from 'react-icons/fa';
+import { sendVerificationEmail, verifyEmail } from '../services/api';
+import imagedatamail from '../assets/Email.json'
+import { Player } from '@lottiefiles/react-lottie-player';
 
 const EmailVerification = () => {
   const [loading, setLoading] = useState(false);
@@ -19,12 +21,13 @@ const EmailVerification = () => {
           setLoading(true);
           setError('');
           setMessage('');
-          
+
           await verifyEmail(token);
           setMessage('Email verified successfully! You can now access all features.');
           setIsVerified(true);
         } catch (err) {
-          setError(err.message || 'Failed to verify email. Please try again.');
+          console.error('Email verification failed:', err);
+          // setError(err.message)
         } finally {
           setLoading(false);
         }
@@ -50,34 +53,46 @@ const EmailVerification = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-          <div className="text-center">
+    <div className="h-screen  w-full overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-blue-50 overflow-hidden">
+     
+
+    
+      <div className=" z-10 flex  mt-5 items-center justify-center">
+        <div className="w-full max-w-lg rounded-2xl border border-white/10 bg-white/10 p-8 shadow-2xl backdrop-blur-md">
+          <div className="text-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 rounded-lg overflow-hidden">
             {isVerified ? (
-              <FaCheckCircle className="mx-auto h-12 w-12 text-green-600" />
+              <FaCheckCircle className="mx-auto h-14 w-14 text-green-400 drop-shadow" />
             ) : (
-              <FaEnvelope className="mx-auto h-12 w-12 text-blue-600" />
+              <FaEnvelope className="mx-auto h-14 w-14 text-blue-400 drop-shadow" />
             )}
-            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
-              Email Verification
+            <h2 className="mt-6 text-3xl font-extrabold tracking-tight text-black/50">
+              {isVerified ? 'Email Verified' : 'Verify Your Email'}
             </h2>
-            <p className="mt-2 text-sm text-gray-600">
-              {isVerified 
-                ? 'Your email has been verified successfully!'
-                : 'Please verify your email address to access all features'}
+            <p className="mt-2 text-sm text-black/50">
+              {isVerified
+                ? 'You can now access all features. Welcome !'
+                : 'We have sent a verification link to your email. Click it to continue.'}
             </p>
           </div>
 
-          <div className="mt-8">
+          {/* Micro-video depending on state */}
+          <div className="mt-6 overflow-hidden rounded-xl border border-white/10">
+            <Player
+              autoplay
+              loop
+              src={imagedatamail}
+              style={{ height: '300px', width: '300px' }}
+            />
+          </div>
+
+          <div className="mt-6">
             {message && (
-              <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-md">
+              <div className="mb-4 rounded-md border border-emerald-400/30 bg-emerald-400/10 p-3 text-black/70">
                 {message}
               </div>
             )}
-            
             {error && (
-              <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-md">
+              <div className="mb-4 rounded-md border border-rose-700 bg-rose-400/10 p-3 text-black/50">
                 {error}
               </div>
             )}
@@ -86,15 +101,17 @@ const EmailVerification = () => {
               <button
                 onClick={handleSendVerification}
                 disabled={loading}
-                className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600/90 px-4 py-3 font-medium text-white shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? (
                   <>
-                    <FaSpinner className="animate-spin -ml-1 mr-3 h-5 w-5" />
-                    Sending...
+                    <FaSpinner className="animate-spin text-white" />
+                    <span>Sending…</span>
                   </>
                 ) : (
-                  'Send Verification Email'
+                  <>
+                    <span>Resend Verification Email</span>
+                  </>
                 )}
               </button>
             )}
@@ -102,7 +119,7 @@ const EmailVerification = () => {
             <div className="mt-6 text-center">
               <button
                 onClick={() => navigate('/profile')}
-                className="text-sm text-blue-600 hover:text-blue-500"
+                className="text-sm font-medium text-black/80 underline-offset-2 underline decoration-blue-400   transition hover:text-blue-400 hover:underline"
               >
                 Back to Profile
               </button>

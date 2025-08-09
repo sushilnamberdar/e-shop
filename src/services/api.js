@@ -315,4 +315,23 @@ export const paymentAPI = {
   }
 };
 
+export const sendVerificationEmail = async () => {
+  try {
+    const response = await api.post('/email-verification/send-verification/me');
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+}
+
+export const verifyEmail = async (token) => {
+  try {
+    const response = await api.get(`/email-verification/verify/${token}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+}
+
+
 export default api; 

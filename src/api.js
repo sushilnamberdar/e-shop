@@ -5,7 +5,7 @@ const apiurl = 'http://localhost:5080/api'
 
 export const sendVerificationEmail = async () => {
   try {
-    const response = await axios.post(`${apiurl}/email-verification/send-verification`);
+    const response = await axios.post(`${apiurl}/email-verification/send-verification/me`);
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;

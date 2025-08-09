@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { FaTrash, FaMinus, FaPlus } from 'react-icons/fa';
-import emptycartimg from '../assets/emptycart.png';
 import { useNavigate } from 'react-router-dom';
 import { orderAPI, getAddresses } from '../services/api';
 import { toast } from 'react-toastify';
+import { Player } from '@lottiefiles/react-lottie-player';
+import emptycartimg from '../assets/emptycart.json'
 
 const CartPage = () => {
   const { cartItems, removeFromCart, updateQuantity, clearCart, getCartTotal, loading } = useCart();
@@ -15,9 +16,6 @@ const CartPage = () => {
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('credit_card');
   
-  const handleimageclick = () => {
-    navigate('/products');
-  }
 
   // Load latest 3 addresses
   useEffect(() => {
@@ -128,26 +126,34 @@ const CartPage = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <div className=" bg-gradient-to-br from-emerald-50 via-white to-blue-100">
       {
         cartItems.length > 0 &&
-        <h2 className="text-2xl font-bold mb-6">Shopping Cart</h2>
+        <h2 className="text-2xl ml-2 font-bold mb-6">Shopping Cart</h2>
 
       }
       {cartItems.length === 0 ? (
         <div
-          onClick={handleimageclick}
-          className="text-center py-12 min-h-screen"
-          style={{
-            backgroundImage: `url(${emptycartimg})`,
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundSize: 'contain', // or 'contain' if you want the whole image visible
-          }}
+          className="text-center py-12 w-full min-h-screen"
         >
+          <Player
+            autoplay
+            loop
+            src={emptycartimg}
+            style={{ height: '300px', width: '300px', margin: '0 auto' }}
+          />
+          <h3 className="text-xl font-semibold mt-6 mb-2 text-gray-700">Your cart is empty</h3>
+          <p className="text-gray-500 mb-6">Looks like you haven't added anything to your cart yet.</p>
+          <button
+            className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+            onClick={() => navigate('/products')}
+          >
+            Shop Products
+          </button>
+        
         </div>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className=" m-5 mb-5 grid grid-cols-1 lg:grid-cols-3 gap-8">
 
           {/* Cart Items */}
           <div className="lg:col-span-2">

@@ -6,6 +6,7 @@ import { productAPI } from '../services/api';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -13,7 +14,7 @@ const ProductsPage = () => {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const { addToCart } = useCart();
-  const [user, setUser] = useState(null);
+  const {user,isLoggedIn,  checkAuthStatus} = useAuth();
   const navigate = useNavigate();
 
   const categories = [
@@ -28,16 +29,7 @@ const ProductsPage = () => {
   ];
 
   // fetch user if loged in or not 
-  useEffect(()=> {
-    const userData = Cookies.get('token');
-    console.log('User Data:', userData);
-    if (userData) {
-      setUser(userData);
-    } else {
-      setUser(null);
-    }
-
-  });
+ 
 
   useEffect(() => {
     fetchProducts();
@@ -61,6 +53,7 @@ const ProductsPage = () => {
   };
 
   const handleAddToCart = (product) => {
+    
     if (!user) {
       toast.error('Please log in to add items to your cart');
       navigate("/login");
