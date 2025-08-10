@@ -102,7 +102,7 @@ const ProductsPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 mt-16">
-      <div className='flex w-full items-center justify-center mb-1'>
+      <div className='flex w-full items-center lg:hidden  justify-center mb-1'>
       <SearchBar query={searchQuery} setQuery={setSearchQuery} onSearch={fetchProducts} />
       </div>
       {/* Category Filter */}

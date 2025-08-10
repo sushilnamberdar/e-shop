@@ -134,7 +134,7 @@ const Header = ({
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <div className="w-72">
+            <div className="w-72 md:hidden lg:flex lg:ml-1">
               <SearchBar query={searchQuery} setQuery={setSearchQuery} />
             </div>
             {user ? (
