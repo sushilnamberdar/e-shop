@@ -9,6 +9,8 @@ export default function PaymentForm({ orderId }) {
   const [errorMsg, setErrorMsg] = useState('');
   const [success, setSuccess] = useState(false);
 
+  
+
   async function onSubmit(e) {
     e.preventDefault();
     if (!stripe || !elements) return;
@@ -61,12 +63,9 @@ export default function PaymentForm({ orderId }) {
   }
 
   return (
-    <div className="max-w-md mx-auto">
-      <form onSubmit={onSubmit} className="space-y-6">
-        <div className="bg-gray-50 p-4 rounded-lg">
+    // <div className=" w-full max-w-md mx-auto">
+      <form onSubmit={onSubmit} className="w-full ">
           <PaymentElement />
-        </div>
-        
         {errorMsg && (
           <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
             {errorMsg}
@@ -88,7 +87,7 @@ export default function PaymentForm({ orderId }) {
           )}
         </button>
       </form>
-    </div>
+    // </div>
   );
 }
 
