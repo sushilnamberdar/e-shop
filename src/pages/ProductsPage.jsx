@@ -4,9 +4,10 @@ import { FaStar, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 import { productAPI } from '../services/api';
 import { toast } from 'react-toastify';
-import Cookies from 'js-cookie';
+import { FaSearch } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import SearchBar from './SearchBar';
 
 const ProductsPage = () => {
   const [products, setProducts] = useState([]);
@@ -14,8 +15,10 @@ const ProductsPage = () => {
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const { addToCart } = useCart();
-  const {user,isLoggedIn,  checkAuthStatus} = useAuth();
+  const { user, isLoggedIn, checkAuthStatus } = useAuth();
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
+
 
   const categories = [
     { id: 'all', name: 'All Products' },
@@ -29,7 +32,7 @@ const ProductsPage = () => {
   ];
 
   // fetch user if loged in or not 
- 
+
 
   useEffect(() => {
     fetchProducts();
@@ -53,13 +56,13 @@ const ProductsPage = () => {
   };
 
   const handleAddToCart = (product) => {
-    
+
     if (!user) {
       toast.error('Please log in to add items to your cart');
       navigate("/login");
       return;
     }
-    if (product.countInStock <=0) {
+    if (product.countInStock <= 0) {
       toast.error('Product is out of stock');
       return;
     }
@@ -99,6 +102,9 @@ const ProductsPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 mt-16">
+      <div className='flex w-full items-center justify-center mb-1'>
+      <SearchBar query={searchQuery} setQuery={setSearchQuery} onSearch={fetchProducts} />
+      </div>
       {/* Category Filter */}
       <div className="mb-8">
         <div className="flex flex-wrap gap-2 justify-center">
@@ -106,11 +112,10 @@ const ProductsPage = () => {
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`px-4 py-2 rounded-full transition ${
-                selectedCategory === category.id
+              className={`px-4 py-2 rounded-full transition ${selectedCategory === category.id
                   ? 'bg-blue-600 text-white'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
+                }`}
             >
               {category.name}
             </button>
@@ -144,15 +149,14 @@ const ProductsPage = () => {
                   {[...Array(5)].map((_, index) => (
                     <FaStar
                       key={index}
-                      className={`h-4 w-4 ${
-                        index < Math.floor(product.rating)
+                      className={`h-4 w-4 ${index < Math.floor(product.rating)
                           ? 'text-yellow-400'
                           : 'text-gray-300'
-                      }`}
+                        }`}
                     />
                   ))}
                 </div>
-                
+
               </div>
               <div className="mt-2 flex justify-between items-center">
                 <span className="text-xl font-bold text-blue-600">
@@ -161,11 +165,10 @@ const ProductsPage = () => {
                 <button
                   onClick={() => handleAddToCart(product)}
                   disabled={product.countInStock <= 0}
-                  className={`p-2 rounded-full transition ${
-                    product.countInStock > 0
+                  className={`p-2 rounded-full transition ${product.countInStock > 0
                       ? 'bg-blue-600 text-white hover:bg-blue-700'
                       : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
+                    }`}
                 >
                   <FaShoppingCart className="h-5 w-5" />
                 </button>
@@ -188,4 +191,4 @@ const ProductsPage = () => {
   );
 };
 
-export default ProductsPage; 
+export default ProductsPage;

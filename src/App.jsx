@@ -1,6 +1,5 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
 import CartPage from './pages/CartPage';
@@ -27,6 +26,7 @@ import NewFooter from './staticpage/NewFooter';
 import FeaturedProductDetailsPage from './pages/FeaturedProductDetails';
 import ScrollToTop from './components/ScrollToTop';
 import AddressPage from './pages/AddressPage';
+import SearchPage from './pages/SearchPage';
 
 function App() {
   return (
@@ -46,6 +46,7 @@ function App() {
             <Route path="/cart" element={<CartPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/contact" element={<ContactPage />} />
+            <Route path="/search" element={<SearchPage />} />
             <Route path="/support" element={<SupportPage />} />
             <Route path="/login" element={
               <ProtectedRoute requireAuth={false}>

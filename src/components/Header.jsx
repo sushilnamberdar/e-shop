@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
@@ -16,6 +16,7 @@ import {
   ClipboardList,
   Search,
 } from 'lucide-react';
+import SearchBar from '../pages/SearchBar';
 
 const Header = ({
   siteName = "Shopinity",
@@ -27,11 +28,14 @@ const Header = ({
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileDropdownOpen, setIsMobileDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const desktopDropdownRef = useRef(null);
+  const mobileMenuRef = useRef(null);
+  const mobileMenuButtonRef = useRef(null);
 
   // Close menu when route changes
   useEffect(() => {
@@ -46,6 +50,53 @@ const Header = ({
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close desktop profile dropdown on outside click or Escape
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const handleClickOutside = (event) => {
+      if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isDropdownOpen]);
+
+  // Close mobile menu on outside click or Escape
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const handleClickOutside = (event) => {
+      const target = event.target;
+      const clickedInsideMenu = mobileMenuRef.current && mobileMenuRef.current.contains(target);
+      const clickedToggleButton = mobileMenuButtonRef.current && mobileMenuButtonRef.current.contains(target);
+      if (!clickedInsideMenu && !clickedToggleButton) {
+        setIsMenuOpen(false);
+        setIsMobileDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setIsMenuOpen(false);
+        setIsMobileDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isMenuOpen]);
 
   const handleLogout = () => {
     logout();
@@ -83,8 +134,11 @@ const Header = ({
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center space-x-4">
+            <div className="w-72">
+              <SearchBar query={searchQuery} setQuery={setSearchQuery} />
+            </div>
             {user ? (
-              <div className="relative">
+              <div className="relative" ref={desktopDropdownRef}>
                 <button
                   onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   className="p-2 text-gray-700 hover:text-emerald-600 transition-colors duration-200"
@@ -154,6 +208,7 @@ const Header = ({
               )}
             </Link>
             <button
+              ref={mobileMenuButtonRef}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="p-2 text-gray-700 hover:text-emerald-600 transition-colors duration-200"
             >
@@ -164,12 +219,16 @@ const Header = ({
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
+          <div className="md:hidden" ref={mobileMenuRef}>
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-              <Link to="/" className="block px-3 py-2 text-gray-900 hover:text-emerald-600 font-medium">Home</Link>
-              <Link to="/products" className="block px-3 py-2 text-gray-700 hover:text-emerald-600 font-medium">Shop</Link>
-              <Link to="/about" className="block px-3 py-2 text-gray-700 hover:text-emerald-600 font-medium">About</Link>
-              <Link to="/contact" className="block px-3 py-2 text-gray-700 hover:text-emerald-600 font-medium">Contact</Link>
+              {/* Mobile Search */}
+              <div className="px-1 py-2">
+                <SearchBar query={searchQuery} setQuery={setSearchQuery} />
+              </div>
+              <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-gray-900 hover:text-emerald-600 font-medium">Home</Link>
+              <Link to="/products" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-gray-700 hover:text-emerald-600 font-medium">Shop</Link>
+              <Link to="/about" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-gray-700 hover:text-emerald-600 font-medium">About</Link>
+              <Link to="/contact" onClick={() => setIsMenuOpen(false)} className="block px-3 py-2 text-gray-700 hover:text-emerald-600 font-medium">Contact</Link>
 
               {user ? (
                 <>
@@ -182,16 +241,16 @@ const Header = ({
 
                   {isMobileDropdownOpen && (
                     <div className="mt-1 space-y-1 bg-gray-50 rounded-lg p-2">
-                      <Link to="/profile" className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+                      <Link to="/profile" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
                         <User className="mr-2" /> Profile
                       </Link>
-                      <Link to="/orders" className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+                      <Link to="/orders" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
                         <ClipboardList className="mr-2" /> Orders
                       </Link>
-                      <Link to="/addresses" className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+                      <Link to="/addresses" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
                         <MapPin className="mr-2" /> Addresses
                       </Link>
-                      <Link to="/change-password" className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
+                      <Link to="/change-password" onClick={() => setIsMenuOpen(false)} className="flex items-center px-4 py-2 text-sm hover:bg-gray-100 rounded-md">
                         <Lock className="mr-2" /> Change Password
                       </Link>
                       <button
