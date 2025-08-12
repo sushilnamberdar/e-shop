@@ -1,5 +1,5 @@
 {
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "https://e-shop-backend-mu.vercel.app/api/$1" }
+    { "source": "/api/:path*", "destination": "https://e-shop-backend-mu.vercel.app/api/:path*" }
   ]
 }
