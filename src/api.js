@@ -1,7 +1,7 @@
 import axios from "axios";
 // Email Verification APIs
 // const apiurl = 'http://localhost:5080/api'
-const apiurl = 'https://e-shop-backend-mu.vercel.app//api'
+const apiurl = 'https://api.99flash.fun/api'
 
 
 

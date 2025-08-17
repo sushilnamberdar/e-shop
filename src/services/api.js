@@ -1,6 +1,6 @@
 import axios from "axios";
 // const API_URL = 'http://localhost:5080/api';
-const API_URL = 'https://e-shop-backend-mu.vercel.app/api'
+const API_URL = 'https://api.99flash.fun/api'
 
 const api = axios.create({
   baseURL: API_URL,
