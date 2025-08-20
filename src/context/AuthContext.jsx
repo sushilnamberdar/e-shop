@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { authAPI } from '../services/api';
 import cookie from 'js-cookie';
+import { toast } from 'react-toastify';
 
 const AuthContext = createContext();
 
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     // Remove token from cookies
     cookie.remove('token');
     // Clear user data
+    authAPI.logout();
     setUser(null);
     setIsLoggedIn(false);
   };
