@@ -21,25 +21,25 @@ import ProductDetailPage from './pages/ProductDetailPage';
 import Orders from './pages/Orders';
 import EmailVerification from './pages/EmailVerification';
 import OrderConfirmation from './pages/OrderConfirmation';
-import Header from './components/Header';
 import NewFooter from './staticpage/NewFooter';
 import FeaturedProductDetailsPage from './pages/FeaturedProductDetails';
 import ScrollToTop from './components/ScrollToTop';
 import AddressPage from './pages/AddressPage';
 import SearchPage from './pages/SearchPage';
+import Navbar from './components/Navbar';
 
 function App() {
   return (
     <CartProvider>
-      <ScrollToTop/>
+      <ScrollToTop />
       <div className="min-h-screen bg-gray-50 flex flex-col">
         {/* <Navbar /> */}
-        <Header/>
+        <Navbar />
         <main className="flex-grow container mx-auto px-4 py-6 mt-16">
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
-            <Route path='/home' element={<HomePage/>}/>
+            <Route path='/home' element={<HomePage />} />
             <Route path="/products" element={<ProductsPage />} />
             <Route path="/products/:id" element={<ProductDetailPage />} />
             <Route path="/featured/:id" element={<FeaturedProductDetailsPage />} />
@@ -67,7 +67,7 @@ function App() {
             } />
             <Route path="/addresses" element={
               <ProtectedRoute>
-                <AddressPage/>
+                <AddressPage />
               </ProtectedRoute>
             } />
             <Route path="/change-password" element={
@@ -97,8 +97,16 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-        <NewFooter/>
-        <ToastContainer />
+        <NewFooter />
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          toastStyle={{
+            width: "300px",      // default size
+            fontSize: "16px",
+            margin:"10%",
+          }}
+        />
       </div>
     </CartProvider>
   );
