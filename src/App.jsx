@@ -35,7 +35,7 @@ function App() {
       <div className="min-h-screen bg-gray-50 flex flex-col">
         {/* <Navbar /> */}
         <Navbar />
-        <main className="flex-grow container mx-auto px-4 py-6 mt-16">
+        <main className="flex-grow container mx-auto px-4 py-6 ">
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<HomePage />} />
