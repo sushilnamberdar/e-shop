@@ -1,6 +1,6 @@
 import axios from "axios";
-// const API_URL = 'http://localhost:5080/api';
-const API_URL = 'https://api.99flash.fun/api'
+const API_URL = 'http://localhost:5080/api';
+// const API_URL = 'https://api.99flash.fun/api'
 
 const api = axios.create({
   baseURL: API_URL,
@@ -282,7 +282,7 @@ export const featuredProducts = async () => {
 
 export const updateAddress = async (addressId, updatedData) => {
   console.log('updateAddress called with id:', addressId, 'and data:', updatedData);
-    const payload = { ...updatedData, addressId};
+  const payload = { ...updatedData, addressId };
   return api.put(`${API_URL}/users/addressupdate`, payload);
 };
 
@@ -303,9 +303,9 @@ export const paymentAPI = {
   confirmPaymentSuccess: async (orderId, paymentIntentId) => {
     try {
       console.log('Confirming payment success:', { orderId, paymentIntentId });
-      const response = await api.post('/payments/payment-success', { 
-        orderId, 
-        paymentIntentId 
+      const response = await api.post('/payments/payment-success', {
+        orderId,
+        paymentIntentId
       });
       console.log('Payment success confirmed:', response.data);
       return response.data;
@@ -334,5 +334,19 @@ export const verifyEmail = async (token) => {
   }
 }
 
+
+export const addReview = async (productId, reviewData) => {
+  console.log('productid',productId,'data',reviewData);
+  return await api.post(`/${productId}/reviews`, reviewData, {
+  });
+}
+
+export const getReviews = async (productId) => {
+  return await api.get(`/${productId}/reviews`);
+}
+
+export const deleteReview = async (reviewId) => {
+  return await api.delete(`/products/reviews/${reviewId}`);
+};
 
 export default api; 

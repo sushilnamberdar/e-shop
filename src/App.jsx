@@ -53,6 +53,9 @@ function App() {
                 <LoginPage />
               </ProtectedRoute>
             } />
+
+            
+
             <Route path="/register" element={
               <ProtectedRoute requireAuth={false}>
                 <RegisterPage />
@@ -104,7 +107,7 @@ function App() {
           toastStyle={{
             width: "300px",      // default size
             fontSize: "16px",
-            margin:"10%",
+            margin: "10%",
           }}
         />
       </div>

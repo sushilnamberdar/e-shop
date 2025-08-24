@@ -25,7 +25,7 @@ const FeaturedProducts = () => {
   }, []);
 
   const handleViewDetails = (productid) => {
-    navigate(`/featured/${productid}`);
+    navigate(`/products/${productid}`);
   };
 
   const viewallproductsbutton = () => {

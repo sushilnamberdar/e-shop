@@ -4,6 +4,8 @@ import { FaStar, FaHeart, FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '../context/CartContext';
 import { productAPI } from '../services/api';
 import { toast } from 'react-toastify';
+import ReviewForm from './reviews/ReviewFormPage';
+import ReviewList from './reviews/ReviewList';
 
 const ProductDetailPage = () => {
   const { id } = useParams();
@@ -100,11 +102,10 @@ const ProductDetailPage = () => {
               {[...Array(5)].map((_, index) => (
                 <FaStar
                   key={index}
-                  className={`h-5 w-5 ${
-                    index < Math.floor(product.rating)
-                      ? 'text-yellow-400'
-                      : 'text-gray-300'
-                  }`}
+                  className={`h-5 w-5 ${index < Math.floor(product.rating)
+                    ? 'text-yellow-400'
+                    : 'text-gray-300'
+                    }`}
                 />
               ))}
             </div>
@@ -152,11 +153,10 @@ const ProductDetailPage = () => {
           <button
             onClick={handleAddToCart}
             disabled={addingToCart}
-            className={`w-full py-3 rounded-lg font-semibold transition flex items-center justify-center ${
-              addingToCart
-                ? 'bg-gray-400 cursor-not-allowed'
-                : 'bg-blue-600 text-white hover:bg-blue-700'
-            }`}
+            className={`w-full py-3 rounded-lg font-semibold transition flex items-center justify-center ${addingToCart
+              ? 'bg-gray-400 cursor-not-allowed'
+              : 'bg-blue-600 text-white hover:bg-blue-700'
+              }`}
           >
             {addingToCart ? (
               <>
@@ -206,9 +206,21 @@ const ProductDetailPage = () => {
               </div>
             </div>
           )}
+
+
+        </div>
+        {/* showing rating */}
+        <div className="mt-12">
+            <h2 className="text-xl font-semibold mb-4">Customer Reviews</h2>
+              <ReviewList productId={product._id} />
+        </div>
+
+        <div className="mt-12">
+          <ReviewForm productId={product._id || id} />
         </div>
       </div>
-    </div>
+
+    </div >
   );
 };
 
